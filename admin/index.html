@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WAG1 Admin — Anonim İstekler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-wrap">
+    <section class="admin-card" id="loginCard">
+      <div class="admin-mark">WAG1 / ADMIN</div>
+      <h1>Anonim İstekler</h1>
+      <p class="muted">Yönetici hesabınla giriş yap.</p>
+
+      <form id="loginForm">
+        <label for="email">E-posta</label>
+        <input id="email" type="email" autocomplete="username" required>
+
+        <label for="password">Şifre</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+
+        <button type="submit">GİRİŞ YAP</button>
+        <p class="status" id="loginStatus" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden>
+      <header class="dash-head">
+        <div>
+          <div class="admin-mark">WAG1 / ADMIN</div>
+          <h1>Anonim İstekler</h1>
+          <p class="muted">Gönderilerde yalnızca sınıf ve mesaj tutulur.</p>
+        </div>
+        <div class="head-actions">
+          <button class="secondary" id="refreshButton" type="button">YENİLE</button>
+          <button class="danger" id="logoutButton" type="button">ÇIKIŞ</button>
+        </div>
+      </header>
+
+      <div class="count-line" id="countLine">Yükleniyor...</div>
+      <div class="requests" id="requestsList"></div>
+      <p class="status" id="dashStatus" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
