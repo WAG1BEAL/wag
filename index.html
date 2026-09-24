@@ -1,70 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="WAG1 anonim istek sistemi.">
-  <title>WAG1 — Anonim İstekler</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>WAG1 Admin</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <div class="gold-dust" aria-hidden="true"></div>
-  <div class="fog fog-one" aria-hidden="true"></div>
-  <div class="fog fog-two" aria-hidden="true"></div>
-  <div class="honeypot-zone" aria-hidden="true"><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
-
-  <header class="hero">
-    <img src="wag1-logo.webp" alt="WAG1 logosu" class="logo">
-    <div class="hero-copy">
-      <p class="eyebrow">WAG1</p>
-      <h1>İstekleriniz</h1>
-      <p>Yazdığınız istekleriniz detaylıca okuyup herkes ile ilgilenmeye çalışacağız.</p>
-    </div>
-  </header>
-
-  <main>
-    <section class="request-card">
-      <div class="card-head"><h2>İSTEĞİNİ İLET</h2></div>
-      <form id="requestForm" autocomplete="off">
-        <label for="className">Sınıfınız</label>
-        <input id="className" name="className" type="text" placeholder="Ornek (12B)" maxlength="5" required>
-
-        <label for="request">İsteğiniz</label>
-        <textarea id="request" name="request" rows="6" placeholder="Vaatlerimiz dışında isteklerinizi belirtiniz" maxlength="1000" required></textarea>
-
-        <button type="submit" id="submitButton">
-          <span>ANONİM OLARAK GÖNDER</span>
-          <span class="arrow">→</span>
-        </button>
-        <p class="status" id="status" aria-live="polite"></p>
-      </form>
-    </section>
-
-    <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutPanel">
-      <span>HAKKIMIZDA</span><span class="about-arrow">↓</span>
-    </button>
-    <section class="about-card" id="aboutPanel" aria-hidden="true">
-      <img src="wag1-hakkimizda.webp" alt="WAG1 kaptanlar ve staff bilgileri" loading="lazy" decoding="async">
-    </section>
-    <section class="hands">
-      <img src="wag1-hands.webp" alt="WAG1 el tasarımı" loading="lazy" decoding="async">
-    </section>
+  <main class="frame-shell">
+    <div id="configError" class="error hidden">Admin sistemi henüz yapılandırılmadı.</div>
+    <iframe id="adminFrame" title="WAG1 Admin Paneli" loading="eager" allow="clipboard-write"></iframe>
   </main>
-
-  <footer><span>WAG1</span><span>•</span><span>Anonim İstek Sistemi</span></footer>
-
-  <iframe id="submitFrame" name="submitFrame" title="Form gönderim alanı" class="sr-only-frame"></iframe>
-  <form id="backendForm" method="POST" target="submitFrame" class="sr-only-form">
-    <input type="hidden" name="action" value="submit">
-    <input type="hidden" name="className" id="backendClass">
-    <input type="hidden" name="request" id="backendRequest">
-    <input type="hidden" name="website" id="backendWebsite">
-  </form>
-
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <script src="../config.js"></script>
+  <script>
+    const frame = document.getElementById('adminFrame');
+    const err = document.getElementById('configError');
+    const url = window.WAG1_GAS_URL || '';
+    if (!url || url.includes('BURAYA_APPS_SCRIPT_WEB_APP_URL')) {
+      err.classList.remove('hidden');
+    } else {
+      frame.src = url + (url.includes('?') ? '&' : '?') + 'view=admin';
+    }
+  </script>
 </body>
 </html>
