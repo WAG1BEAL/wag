@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>WAG1 / Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="badge">WAG1 / ADMIN</div>
+    <h1>Anonim İstekler</h1>
+    <p class="sub">Yönetim paneli.</p>
+    <div id="configError" class="error hidden">Admin sistemi henüz yapılandırılmadı. Önce config.js içindeki Apps Script URL'sini doldur.</div>
+    <iframe id="adminFrame" title="WAG1 Admin Paneli" loading="eager" allow="clipboard-write"></iframe>
+  </div>
+  <script src="../config.js"></script>
+  <script>
+    const frame = document.getElementById('adminFrame');
+    const err = document.getElementById('configError');
+    const url = window.WAG1_GAS_URL || '';
+    if (!url || url.includes('BURAYA_APPS_SCRIPT_WEB_APP_URL')) {
+      err.classList.remove('hidden');
+    } else {
+      frame.src = url + (url.includes('?') ? '&' : '?') + 'view=admin';
+    }
+  </script>
+</body>
+</html>
