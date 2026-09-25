@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#050505">
-  <title>WAG1 — BEAL</title>
+  <title>WAG1</title>
   <meta name="description" content="WAG1 anonim istek sistemi — modern deneme sürümü.">
   <style>
     :root{
@@ -448,7 +448,7 @@ main{width:min(980px,100%); margin:auto; padding:34px 18px 80px}
         <div class="request-card">
           <div class="card-top">
             <div>
-              <div class="card-kicker">WAG1 BEAL</div>
+              <div class="card-kicker">WAG1 / ANONİM</div>
               <h2 class="card-title">İsteğini ilet</h2>
             </div>
             <div class="secure">İsmin görünmez · anonim gönderim</div>
@@ -491,7 +491,7 @@ main{width:min(980px,100%); margin:auto; padding:34px 18px 80px}
     </section>
   </main>
 
-  <footer>WAG1 · BEAL</footer>
+  <footer>WAG1 · ANONİM İSTEK SİSTEMİ · DENEME SÜRÜMÜ</footer>
 
   <iframe id="submitFrame" name="submitFrame" title="Form gönderim alanı" style="display:none;width:0;height:0;border:0"></iframe>
 
@@ -526,8 +526,23 @@ main{width:min(980px,100%); margin:auto; padding:34px 18px 80px}
       const className = document.getElementById("className").value.trim();
       const request = document.getElementById("request").value.trim();
 
+      const classParts = className.split(/\s+/).filter(Boolean);
+      const requestWords = request.split(/\s+/).filter(word => /[\p{L}\p{N}]{2,}/u.test(word));
+
       if(!className || !request){
         statusEl.textContent = "Lütfen iki alanı da doldur.";
+        statusEl.className = "status err";
+        return;
+      }
+
+      if(classParts.length < 1 || className.replace(/\s/g,'').length < 2){
+        statusEl.textContent = "Lütfen sınıfınızı eksiksiz yazın. Örnek: 12B";
+        statusEl.className = "status err";
+        return;
+      }
+
+      if(requestWords.length < 1){
+        statusEl.textContent = "İstek kısmına en az 1 kelime yazmalısın.";
         statusEl.className = "status err";
         return;
       }
@@ -556,17 +571,41 @@ main{width:min(980px,100%); margin:auto; padding:34px 18px 80px}
       add("request", request);
       add("website", "");
 
+      let settled = false;
+
+      const finish = (ok, message) => {
+        if(settled)return;
+        settled = true;
+        window.removeEventListener("message", onBackendMessage);
+
+        if(ok){
+          form.reset();
+          statusEl.textContent = "İsteğin anonim olarak gönderildi ✓";
+          statusEl.className = "status ok";
+        }else{
+          statusEl.textContent = message || "İstek gönderilemedi. Lütfen tekrar dene.";
+          statusEl.className = "status err";
+        }
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = "1";
+      };
+
+      const onBackendMessage = (event) => {
+        const data = event.data;
+        if(!data || typeof data !== "object" || typeof data.ok !== "boolean") return;
+        finish(data.ok, data.message);
+      };
+
+      window.addEventListener("message", onBackendMessage);
+
       document.body.appendChild(tempForm);
       tempForm.submit();
       tempForm.remove();
 
+      // Fallback for browsers that block the iframe postMessage response.
       setTimeout(() => {
-        form.reset();
-        statusEl.textContent = "İsteğin anonim olarak gönderildi ✓";
-        statusEl.className = "status ok";
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = "1";
-      }, 900);
+        if(!settled) finish(true, "");
+      }, 5000);
     });
   </script>
 
